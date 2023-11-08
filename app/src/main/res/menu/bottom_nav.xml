@@ -1,0 +1,15 @@
+<?xml version="1.0" encoding="utf-8"?>
+<menu xmlns:android="http://schemas.android.com/apk/res/android">
+    <item
+        android:title="Konversi Suhu"
+        android:id="@+id/suhu"
+        android:icon="@drawable/baseline_calculate_24"/>
+    <item
+        android:title="Hitung BMI"
+        android:id="@+id/bmi"
+        android:icon="@drawable/baseline_calculate_24"/>
+    <item
+        android:title="Profile"
+        android:id="@+id/profile"
+        android:icon="@drawable/baseline_account_circle_24"/>
+</menu>
