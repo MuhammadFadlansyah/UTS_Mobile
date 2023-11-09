@@ -13,12 +13,15 @@ class Home : AppCompatActivity() {
         super.onCreate(savedInstanceState)
         binding = ActivityHomeBinding.inflate(layoutInflater)
         setContentView(binding.root)
+        replaceFragment(DashboardFragment())
 
         binding.bottomNavigation.setOnItemSelectedListener {
             when(it.itemId){
                 R.id.suhu -> replaceFragment(ConverterFragment())
                 R.id.bmi -> replaceFragment(BmiFragment())
                 R.id.profile -> replaceFragment(ProfileFragment())
+                R.id.uang -> replaceFragment(CalculationFragment())
+                R.id.home -> replaceFragment(DashboardFragment())
 
                 else->{
 
