@@ -1,32 +1,62 @@
 package com.fadlan.airquality
 
 import android.content.Intent
-import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
-import android.widget.Button
-import android.widget.TextView
+import android.widget.Toast
+import androidx.appcompat.app.AppCompatActivity
+import com.google.firebase.auth.FirebaseAuth
+import com.fadlan.airquality.databinding.ActivityLoginBinding
 
 class Login : AppCompatActivity() {
 
+    private lateinit var auth: FirebaseAuth
+    private lateinit var binding: ActivityLoginBinding
+
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
-        setContentView(R.layout.activity_login)
+        binding = ActivityLoginBinding.inflate(layoutInflater)
+        setContentView(binding.root)
 
-        val login = findViewById<Button>(R.id.btnlogin)
-        login.setOnClickListener{
-            val intent = Intent(this, Home::class.java)
-            startActivity(intent)
+        auth = FirebaseAuth.getInstance()
+
+        binding.loginButton.setOnClickListener {
+            val username = binding.loginUsername.text.toString().trim()
+            val password = binding.loginPassword.text.toString().trim()
+            val email = binding.loginUsername.text.toString().trim() + "@gmail.com"
+
+            if (email.isEmpty() || password.isEmpty()) {
+                Toast.makeText(this, "Please fill in all fields", Toast.LENGTH_SHORT).show()
+                return@setOnClickListener
+            }
+
+            signIn(username, password)
         }
 
-        val register = findViewById<TextView>(R.id.btnregister)
-        register.setOnClickListener {
-            val intent = Intent(this, Register::class.java)
-            startActivity(intent)
+        binding.signupRedirectText.setOnClickListener {
+            startActivity(Intent(this, Register::class.java))
+            finish()
         }
-        val forgot = findViewById<TextView>(R.id.btnforgot)
-        forgot.setOnClickListener {
-            val intent = Intent(this, ForgetPassword::class.java)
-            startActivity(intent)
-        }
+    }
+
+    private fun signIn(email: String, password: String) {
+        auth.signInWithEmailAndPassword(email, password)
+            .addOnCompleteListener(this) { task ->
+                if (task.isSuccessful) {
+                    Toast.makeText(this, "Login successful", Toast.LENGTH_SHORT).show()
+                    navigateToHome()
+                } else {
+                    Toast.makeText(
+                        this,
+                        "Login failed: ${task.exception?.message}",
+                        Toast.LENGTH_SHORT
+                    ).show()
+                }
+            }
+    }
+
+    private fun navigateToHome() {
+        val intent = Intent(this, Home::class.java)
+        startActivity(intent)
+        finish() // Optional, untuk menutup aktivitas saat ini agar tidak bisa kembali ke halaman login
     }
 }
